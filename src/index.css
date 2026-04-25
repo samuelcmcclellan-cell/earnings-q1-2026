@@ -1,0 +1,198 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-bg-primary: #06090f;
+  --color-bg-secondary: #0c111c;
+  --color-bg-card: #131a2a;
+  --color-bg-elevated: #1a2238;
+  --color-border: #1f2a44;
+  --color-border-strong: #2c3a5e;
+
+  --color-text-primary: #e8edf7;
+  --color-text-secondary: #9aa7c2;
+  --color-text-muted: #6b7894;
+
+  --color-accent-emerald: #10b981;
+  --color-accent-rose: #f43f5e;
+  --color-accent-amber: #f59e0b;
+  --color-accent-blue: #3b82f6;
+  --color-accent-violet: #8b5cf6;
+  --color-accent-cyan: #06b6d4;
+  --color-accent-orange: #f97316;
+  --color-accent-yellow: #eab308;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-display);
+    font-feature-settings: "cv11", "ss01", "ss03";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-ticker {
+  animation: ticker 60s linear infinite;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.glass {
+  background-color: rgba(19, 26, 42, 0.65);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border);
+}
+
+.report-prose {
+  color: #cbd5e1;
+  font-size: 16px;
+  line-height: 1.75;
+  max-width: 72ch;
+  margin: 0 auto;
+}
+.report-prose h1 {
+  font-size: 2rem;
+  color: #f1f5f9;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 1.25rem;
+  line-height: 1.15;
+}
+.report-prose h2 {
+  font-size: 1.5rem;
+  color: #f1f5f9;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 2.5rem 0 1rem;
+  line-height: 1.2;
+  padding-top: 1.25rem;
+  border-top: 1px solid #1f2a44;
+}
+.report-prose h3 {
+  font-size: 1.125rem;
+  color: #e2e8f0;
+  font-weight: 600;
+  margin: 1.75rem 0 0.5rem;
+  line-height: 1.3;
+}
+.report-prose p {
+  margin: 0 0 1rem;
+}
+.report-prose strong {
+  color: #f1f5f9;
+  font-weight: 600;
+}
+.report-prose em {
+  color: #e2e8f0;
+}
+.report-prose blockquote {
+  border-left: 3px solid #3b82f6;
+  padding: 0.5rem 1rem;
+  margin: 1.25rem 0;
+  font-style: italic;
+  color: #cbd5e1;
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: 0 6px 6px 0;
+}
+.report-prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+.report-prose ul, .report-prose ol {
+  margin: 0 0 1rem 1.25rem;
+  padding-left: 0.5rem;
+}
+.report-prose li {
+  margin: 0.4rem 0;
+}
+.report-prose ul > li::marker {
+  color: #475569;
+}
+.report-prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: rgba(148, 163, 184, 0.1);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  color: #f1f5f9;
+}
+.report-prose hr {
+  border: none;
+  border-top: 1px solid #1f2a44;
+  margin: 2rem 0;
+}
+.report-prose .lede {
+  font-size: 1.125rem;
+  color: #e2e8f0;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+.report-prose .pullquote {
+  font-size: 1.25rem;
+  color: #f1f5f9;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  font-style: italic;
+  text-align: center;
+  margin: 2.5rem auto;
+  max-width: 56ch;
+  padding: 0;
+}
+.report-prose .attrib {
+  display: block;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: #94a3b8;
+  font-style: normal;
+  margin-top: 0.5rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.report-prose .num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
