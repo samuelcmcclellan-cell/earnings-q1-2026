@@ -1,32 +1,71 @@
-import type { CompanyEarnings } from "../types";
+import type { MacroStats } from "../types";
 import { fmtPct } from "../lib/utils";
 
-export function Scoreboard({ companies }: { companies: CompanyEarnings[] }) {
-  const beatCount = companies.filter((c) => c.epsSurprisePct > 0).length;
-  const missCount = companies.filter((c) => c.epsSurprisePct < 0).length;
-  const avgEpsBeat = companies.reduce((s, c) => s + c.epsSurprisePct, 0) / companies.length;
-  const avgRevGrowth = companies.reduce((s, c) => s + c.revenueGrowthYoY, 0) / companies.length;
-  const avgReaction = companies.reduce((s, c) => s + c.stockReaction1d, 0) / companies.length;
-  const raised = companies.filter((c) => c.guidance === "raised").length;
-  const lowered = companies.filter((c) => c.guidance === "lowered" || c.guidance === "withdrawn").length;
-  const reactPositive = companies.filter((c) => c.stockReaction1d > 0).length;
-
+export function Scoreboard({ m }: { m: MacroStats }) {
   const items = [
-    { label: "Reports", value: `${companies.length}`, sub: "Mar 20 – Apr 24" },
-    { label: "EPS Beats", value: `${beatCount}`, sub: `${missCount} miss · ${companies.length - beatCount - missCount} in-line` },
-    { label: "Avg EPS Surp", value: fmtPct(avgEpsBeat, 1), sub: "headline beat" },
-    { label: "Avg Rev Growth", value: fmtPct(avgRevGrowth, 1), sub: "YoY blended" },
-    { label: "Avg Day-1 Move", value: fmtPct(avgReaction, 1), sub: `${reactPositive}/${companies.length} positive` },
-    { label: "Raised Guide", value: `${raised}`, sub: `${lowered} cut/withdrew` },
+    {
+      label: "S&P 500 Reporting",
+      value: `${m.pctReporting}%`,
+      sub: `Through ${m.asOf}`,
+      tone: "blue" as const,
+    },
+    {
+      label: "EPS Beat Rate",
+      value: `${m.epsBeatPct}%`,
+      sub: `${m.revBeatPct}% beat revenue`,
+      tone: "emerald" as const,
+    },
+    {
+      label: "EPS Surprise",
+      value: fmtPct(m.epsSurprisePct, 1),
+      sub: `5yr avg ${fmtPct(m.epsSurprise5yr, 1)} · 10yr ${fmtPct(m.epsSurprise10yr, 1)}`,
+      tone: "emerald" as const,
+    },
+    {
+      label: "Earnings Growth",
+      value: fmtPct(m.earningsGrowth, 1),
+      sub: `${fmtPct(m.earningsGrowthMar31, 1)} on Mar 31 · ${m.consecDoubleDigitGrowthQuarters}th straight double-digit Q`,
+      tone: "violet" as const,
+    },
+    {
+      label: "Revenue Growth",
+      value: fmtPct(m.revenueGrowth, 1),
+      sub: `Highest since Q3 2022 · was ${fmtPct(m.revenueGrowthMar31, 1)} Mar 31`,
+      tone: "cyan" as const,
+    },
+    {
+      label: "Net Profit Margin",
+      value: `${m.netMargin.toFixed(1)}%`,
+      sub: `RECORD · prior ${m.netMarginPriorRecord}% · 5yr avg ${m.netMargin5yr}%`,
+      tone: "amber" as const,
+    },
   ];
+
+  const accentBg: Record<string, string> = {
+    blue: "from-blue-500/25",
+    emerald: "from-emerald-500/25",
+    violet: "from-violet-500/25",
+    cyan: "from-cyan-500/25",
+    amber: "from-amber-500/25",
+  };
+  const accentText: Record<string, string> = {
+    blue: "text-blue-300",
+    emerald: "text-emerald-300",
+    violet: "text-violet-300",
+    cyan: "text-cyan-300",
+    amber: "text-amber-300",
+  };
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
       {items.map((i) => (
-        <div key={i.label} className="glass rounded-lg px-4 py-3.5">
-          <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">{i.label}</div>
-          <div className="mt-2 text-xl num font-semibold text-slate-50">{i.value}</div>
-          <div className="mt-1 text-[10px] text-slate-500">{i.sub}</div>
+        <div key={i.label} className="relative glass rounded-lg p-4 overflow-hidden">
+          <div className={`absolute inset-0 bg-gradient-to-br ${accentBg[i.tone]} to-transparent opacity-60 pointer-events-none`} />
+          <div className="relative">
+            <div className="text-[10px] uppercase tracking-[0.2em] text-slate-400">{i.label}</div>
+            <div className={`mt-2 text-2xl num font-semibold ${accentText[i.tone]}`}>{i.value}</div>
+            <div className="mt-1.5 text-[10px] text-slate-500 leading-snug">{i.sub}</div>
+          </div>
         </div>
       ))}
     </div>

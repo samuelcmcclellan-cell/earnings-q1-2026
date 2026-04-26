@@ -1,76 +1,54 @@
-import { ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, ZAxis, CartesianGrid, Tooltip, ReferenceLine } from "recharts";
-import type { CompanyEarnings } from "../../types";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell, LabelList } from "recharts";
+import type { MacroStats } from "../../types";
 
-export function ReactionScatter({ companies }: { companies: CompanyEarnings[] }) {
-  const data = companies.map((c) => ({
-    ticker: c.ticker,
-    epsSurprise: c.epsSurprisePct,
-    reaction: c.stockReaction1d,
-    name: c.name,
-  }));
+export function ReactionScatter({ m }: { m: MacroStats }) {
+  // Compares Q1 2026 vs 5-year averages on four FactSet metrics.
+  const data = [
+    { metric: "EPS Beat %", current: m.epsBeatPct, avg: 77, unit: "%" },        // 5yr avg ~77% per FactSet historical
+    { metric: "Surprise %", current: m.epsSurprisePct, avg: m.epsSurprise5yr, unit: "%" },
+    { metric: "Beat Reaction", current: m.beatReaction, avg: m.beatReaction5yr, unit: "%" },
+    { metric: "Miss Reaction", current: m.missReaction, avg: m.missReaction5yr, unit: "%" },
+  ];
+
   return (
     <div className="glass rounded-xl p-5">
       <div className="flex items-baseline justify-between mb-4">
         <div>
-          <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Reaction vs Surprise</div>
-          <div className="text-base font-medium text-slate-200 mt-1">Beat ≠ Reward</div>
+          <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">FactSet 4/24/2026</div>
+          <div className="text-base font-medium text-slate-200 mt-1">This Season vs 5-Year Average</div>
         </div>
-        <div className="text-[11px] text-slate-500">Day-1 stock reaction (Y) vs EPS surprise (X)</div>
+        <div className="text-[11px] text-slate-500">Bigger beats, softer reactions</div>
       </div>
-      <div className="h-[340px]">
+      <div className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
-          <ScatterChart margin={{ top: 10, right: 20, bottom: 30, left: 10 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1f2a44" />
-            <XAxis
-              type="number"
-              dataKey="epsSurprise"
-              name="EPS Surprise"
-              unit="%"
-              stroke="#6b7894"
-              fontSize={11}
-              tick={{ fill: "#9aa7c2" }}
-              label={{ value: "EPS Surprise (%)", position: "insideBottom", offset: -15, fill: "#6b7894", fontSize: 11 }}
-            />
-            <YAxis
-              type="number"
-              dataKey="reaction"
-              name="Reaction"
-              unit="%"
-              stroke="#6b7894"
-              fontSize={11}
-              tick={{ fill: "#9aa7c2" }}
-              label={{ value: "Day-1 Reaction (%)", angle: -90, position: "insideLeft", fill: "#6b7894", fontSize: 11 }}
-            />
-            <ZAxis range={[80, 80]} />
-            <ReferenceLine y={0} stroke="#2c3a5e" />
-            <ReferenceLine x={0} stroke="#2c3a5e" />
+          <BarChart data={data} layout="vertical" margin={{ top: 10, right: 60, bottom: 5, left: 8 }}>
+            <CartesianGrid horizontal={false} stroke="#1f2a44" />
+            <XAxis type="number" stroke="#6b7894" fontSize={11} tick={{ fill: "#9aa7c2" }} unit="%" />
+            <YAxis dataKey="metric" type="category" stroke="#6b7894" fontSize={11} tick={{ fill: "#9aa7c2" }} width={104} />
             <Tooltip
               contentStyle={{ backgroundColor: "#0c111c", border: "1px solid #2c3a5e", borderRadius: 8, fontSize: 12 }}
-              cursor={{ strokeDasharray: "3 3" }}
-              formatter={(v: number, n) => [`${v.toFixed(1)}%`, n]}
-              labelFormatter={() => ""}
-              content={({ active, payload }) => {
-                if (active && payload && payload.length) {
-                  const p = payload[0].payload;
-                  return (
-                    <div className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs">
-                      <div className="font-semibold text-slate-100 num">{p.ticker}</div>
-                      <div className="text-slate-400">{p.name}</div>
-                      <div className="mt-1 text-slate-300 num">EPS surp: {p.epsSurprise.toFixed(1)}%</div>
-                      <div className="text-slate-300 num">Reaction: {p.reaction.toFixed(1)}%</div>
-                    </div>
-                  );
-                }
-                return null;
-              }}
+              cursor={{ fill: "rgba(59,130,246,0.06)" }}
+              formatter={(v: number, name: string) => [`${v.toFixed(1)}%`, name === "current" ? "Q1 2026" : "5-yr avg"]}
             />
-            <Scatter data={data} fill="#3b82f6">
+            <Bar dataKey="avg" name="5yr avg" fill="#475569" radius={[0, 4, 4, 0]} barSize={10} />
+            <Bar dataKey="current" name="Q1 2026" radius={[0, 4, 4, 0]} barSize={18}>
               {data.map((d, i) => (
-                <circle key={i} r={6} fill={d.reaction >= 0 ? "#10b981" : "#f43f5e"} fillOpacity={0.85} stroke="#020617" strokeWidth={1} />
+                <Cell
+                  key={i}
+                  fill={
+                    d.metric === "Miss Reaction"
+                      ? d.current > d.avg ? "#10b981" : "#f43f5e"
+                      : d.current >= d.avg ? "#10b981" : "#f43f5e"
+                  }
+                />
               ))}
-            </Scatter>
-          </ScatterChart>
+              <LabelList dataKey="current" position="right" fill="#cbd5e1" fontSize={11} formatter={(v: number) => `${v.toFixed(1)}%`} />
+            </Bar>
+          </BarChart>
         </ResponsiveContainer>
+      </div>
+      <div className="mt-3 text-[11px] text-slate-500 leading-relaxed">
+        Surprise magnitude is +12.3% vs the 5-yr +7.3% — beats are bigger. But the reward (+0.9% vs +1.0% 5yr) is slightly smaller. The market has front-run the result.
       </div>
     </div>
   );

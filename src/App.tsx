@@ -4,23 +4,28 @@ import { Hero } from "./components/Hero";
 import { Section } from "./components/Section";
 import { Scoreboard } from "./components/Scoreboard";
 import { ThemeCard } from "./components/ThemeCard";
-import { CompanyTile } from "./components/CompanyTile";
-import { CompanyDetail } from "./components/CompanyDetail";
+import { SectorTile } from "./components/SectorTile";
+import { SectorDetail } from "./components/SectorDetail";
 import { QuoteWall } from "./components/QuoteWall";
 import { ReportViewer } from "./components/ReportViewer";
 import { Footer } from "./components/Footer";
 import { ReactionScatter } from "./components/charts/ReactionScatter";
 import { BeatMissBars } from "./components/charts/BeatMissBars";
 import { SectorGrowth } from "./components/charts/SectorGrowth";
+import { SectorMargins } from "./components/charts/SectorMargins";
+import { GuidanceSplit } from "./components/charts/GuidanceSplit";
+import { ForwardPE } from "./components/charts/ForwardPE";
 import { themes } from "./data/themes";
 import { companies } from "./data/companies";
+import { sectors } from "./data/sectors";
+import { macro } from "./data/macro";
 import { quotes } from "./data/quotes";
 import { hotTake, execBrief, deepRead } from "./data/reports";
-import type { CompanyEarnings } from "./types";
+import type { Sector } from "./types";
 
 export default function App() {
   const [active, setActive] = useState("themes");
-  const [selected, setSelected] = useState<CompanyEarnings | null>(null);
+  const [selectedSector, setSelectedSector] = useState<Sector | null>(null);
 
   const handleNav = (k: string) => {
     setActive(k);
@@ -30,22 +35,22 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <Header active={active} onNav={handleNav} />
-      <Hero asOfDate="24 April 2026" reportCount={companies.length} />
+      <Hero asOfDate={macro.asOf} pctReporting={macro.pctReporting} />
 
       <Section
         id="scoreboard"
-        eyebrow="Season Scoreboard"
+        eyebrow="FactSet Scoreboard"
         title="Six numbers that frame the season."
-        subtitle="The headline numbers don't tell the story — but they tell you which story to look for."
+        subtitle="Sourced directly from FactSet Earnings Insight, 4/24/2026. Comparators show 5-year and 10-year averages, prior-period values, and same-period prior year."
       >
-        <Scoreboard companies={companies} />
+        <Scoreboard m={macro} />
       </Section>
 
       <Section
         id="themes"
-        eyebrow="Four Themes"
-        title="What the transcripts actually said."
-        subtitle="Forget the noise. Across 19 mega-cap reports, four distinct narratives emerged from what executives chose to emphasize and what they chose to deflect."
+        eyebrow="Five Themes"
+        title="What FactSet's data actually says."
+        subtitle="Through 28% of S&P 500 reports, five distinct narratives emerge from the season-level statistics — built from FactSet's blended growth, beat rates, sector dispersion, and forward-multiple context."
       >
         <div className="grid md:grid-cols-2 gap-5">
           {themes.map((t) => (
@@ -55,35 +60,40 @@ export default function App() {
       </Section>
 
       <Section
-        id="data"
-        eyebrow="The Data"
-        title="Beat, miss, and the price of being right."
-        subtitle="Three reads of the season: surprise magnitude, what the market paid for, and where growth actually showed up."
+        id="sectors"
+        eyebrow="11 Sectors"
+        title="Click any sector for the full FactSet drill-down."
+        subtitle="Each tile shows blended Q1 2026 earnings growth, revenue growth, EPS beat rate, and net margin — all sourced from FactSet 4/24/2026. Em-dashes indicate fields FactSet does not specify in the text-extractable commentary."
       >
-        <div className="grid lg:grid-cols-2 gap-5">
-          <BeatMissBars companies={companies} />
-          <ReactionScatter companies={companies} />
-        </div>
-        <div className="mt-5">
-          <SectorGrowth companies={companies} />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {sectors.map((s) => (
+            <SectorTile
+              key={s.id}
+              s={s}
+              onClick={() => setSelectedSector(s)}
+              active={selectedSector?.id === s.id}
+            />
+          ))}
         </div>
       </Section>
 
       <Section
-        id="companies"
-        eyebrow="19 Reports"
-        title="Click any company for the full quote, guidance, and takeaways."
-        subtitle="Each tile shows the headline beat or miss, day-1 stock reaction, guidance posture, and one quote that captures the call."
+        id="data"
+        eyebrow="The Data"
+        title="Sector dispersion, multiple expansion, and the bar that moved."
+        subtitle="Six FactSet-sourced charts: sector growth (earnings vs revenue), sector margins (Q1 vs benchmark), EPS beat rate by sector, this season vs the 5-year average, Q2/FY guidance split, and the forward P/E rerating."
       >
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {companies.map((c) => (
-            <CompanyTile
-              key={c.ticker}
-              c={c}
-              onClick={() => setSelected(c)}
-              active={selected?.ticker === c.ticker}
-            />
-          ))}
+        <div className="grid lg:grid-cols-2 gap-5">
+          <SectorGrowth sectors={sectors} />
+          <SectorMargins sectors={sectors} />
+        </div>
+        <div className="mt-5 grid lg:grid-cols-2 gap-5">
+          <BeatMissBars sectors={sectors} />
+          <ReactionScatter m={macro} />
+        </div>
+        <div className="mt-5 grid lg:grid-cols-2 gap-5">
+          <GuidanceSplit m={macro} />
+          <ForwardPE m={macro} />
         </div>
       </Section>
 
@@ -91,7 +101,7 @@ export default function App() {
         id="quotes"
         eyebrow="Quote Wall"
         title="The lines that actually moved the conversation."
-        subtitle="Filterable by theme. Verbatim from prepared remarks and Q&A, with attribution."
+        subtitle="Filterable by theme. Verbatim from prepared remarks and Q&A, with attribution. (Quotes carry over from primary-research transcripts; numerics in the dashboard come from FactSet.)"
       >
         <QuoteWall quotes={quotes} themes={themes.map((t) => ({ id: t.id, title: t.title }))} />
       </Section>
@@ -100,14 +110,20 @@ export default function App() {
         id="reports"
         eyebrow="Three Reads"
         title="The full report — choose your length."
-        subtitle="Same season, three distillations. The 100-word hot take, the 500-word executive brief, and the 5,000-word deep read."
+        subtitle="Same season, three distillations. The 100-word hot take, the 500-word executive brief, and the 5,000-word deep read. All numerics sourced from FactSet 4/24/2026."
       >
         <ReportViewer hot={hotTake} exec={execBrief} deep={deepRead} />
       </Section>
 
       <Footer />
 
-      {selected && <CompanyDetail c={selected} onClose={() => setSelected(null)} />}
+      {selectedSector && (
+        <SectorDetail
+          s={selectedSector}
+          caseStudies={companies.filter((c) => c.sectorId === selectedSector.id)}
+          onClose={() => setSelectedSector(null)}
+        />
+      )}
     </div>
   );
 }

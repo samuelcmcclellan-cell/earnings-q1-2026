@@ -10,6 +10,9 @@ const accentBg: Record<string, string> = {
   blue: "from-blue-500/20 via-blue-500/5",
   orange: "from-orange-500/20 via-orange-500/5",
   yellow: "from-yellow-500/20 via-yellow-500/5",
+  sky: "from-sky-500/20 via-sky-500/5",
+  fuchsia: "from-fuchsia-500/20 via-fuchsia-500/5",
+  lime: "from-lime-500/20 via-lime-500/5",
 };
 
 const accentText: Record<string, string> = {
@@ -20,7 +23,10 @@ const accentText: Record<string, string> = {
   cyan: "text-cyan-400",
   blue: "text-blue-400",
   orange: "text-orange-400",
-  yellow: "text-yellow-400",
+  yellow: "text-yellow-300",
+  sky: "text-sky-400",
+  fuchsia: "text-fuchsia-400",
+  lime: "text-lime-400",
 };
 
 export function ThemeCard({ theme }: { theme: Theme }) {
@@ -38,9 +44,9 @@ export function ThemeCard({ theme }: { theme: Theme }) {
         <p className={cn("mt-2 text-sm font-medium", accentText[theme.accent])}>{theme.tagline}</p>
         <p className="mt-4 text-sm text-slate-300 leading-relaxed">{theme.hook}</p>
         <div className="mt-5 pt-5 border-t border-slate-800 space-y-2 flex-1">
-          {theme.evidence.slice(0, 3).map((e, i) => (
+          {theme.evidence.slice(0, 4).map((e, i) => (
             <div key={i} className="flex items-start gap-2 text-xs">
-              <span className="num text-slate-500 w-12 shrink-0">{e.ticker}</span>
+              <span className="num text-slate-500 w-20 shrink-0 truncate" title={e.ticker}>{e.ticker}</span>
               <span className="text-slate-400 leading-relaxed">{e.point}</span>
             </div>
           ))}

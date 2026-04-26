@@ -1,10 +1,18 @@
 import type { CompanyEarnings } from "../types";
 
+// Companies in this file are used as case-study callouts inside the SectorDetail
+// view. Where FactSet (4/24/2026) specifically named a company with an exact
+// actual-vs-estimate, those figures are GAAP and are marked factsetSourced:true.
+// The 10 companies FactSet does not name keep their primary-research figures
+// (factsetSourced:false) and are surfaced in sector context for their quote /
+// takeaway, not their headline number.
+
 export const companies: CompanyEarnings[] = [
   {
     ticker: "ACN",
     name: "Accenture",
-    sector: "Consulting",
+    sector: "IT Services",
+    sectorId: "info-tech",
     reportDate: "Mar 19",
     fiscalPeriod: "FQ2 2026",
     epsActual: 2.93,
@@ -27,12 +35,14 @@ export const companies: CompanyEarnings[] = [
       quote: "AI is permeating everything we do because it either is driving why clients are actually doing things — like moving to the cloud — or when we're doing something that isn't specific AI, they're looking at our AI credentials because everything is aimed to get to AI."
     },
     themeTags: ["ai-power", "capital-discipline"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: false
   },
   {
     ticker: "NKE",
     name: "Nike",
-    sector: "Consumer",
+    sector: "Textiles, Apparel & Luxury Goods",
+    sectorId: "consumer-discretionary",
     reportDate: "Mar 31",
     fiscalPeriod: "FQ3 2026",
     epsActual: 0.35,
@@ -55,12 +65,14 @@ export const companies: CompanyEarnings[] = [
       quote: "While our comeback is taking longer than we would like, we have a clear set of plans in place, and we expect to complete our Win Now actions by the end of the calendar year."
     },
     themeTags: ["tariff-reset", "consumer-bifurcation"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: false
   },
   {
     ticker: "GS",
     name: "Goldman Sachs",
-    sector: "Banks",
+    sector: "Capital Markets",
+    sectorId: "financials",
     reportDate: "Apr 13",
     fiscalPeriod: "Q1 2026",
     epsActual: 17.55,
@@ -83,19 +95,21 @@ export const companies: CompanyEarnings[] = [
       quote: "The environment for investment banking activity continues to be incredibly robust, particularly M&A activity. The backlog closed 2025 at its highest level in four years."
     },
     themeTags: ["capital-discipline"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: false
   },
   {
     ticker: "JPM",
     name: "JPMorgan Chase",
     sector: "Banks",
+    sectorId: "financials",
     reportDate: "Apr 14",
     fiscalPeriod: "Q1 2026",
     epsActual: 5.94,
-    epsEstimate: 5.49,
-    epsSurprisePct: 8.2,
-    revenueActualBn: 50.5,
-    revenueEstimateBn: 49.2,
+    epsEstimate: 5.47,
+    epsSurprisePct: 8.6,
+    revenueActualBn: 49.84,
+    revenueEstimateBn: 49.18,
     revenueGrowthYoY: 10.0,
     stockReaction1d: -1.0,
     guidance: "lowered",
@@ -111,12 +125,14 @@ export const companies: CompanyEarnings[] = [
       quote: "The trade battles are clearly not over, and it should be expected that many nations are analyzing how and with whom they should create trade arrangements. It is hard to figure out what the long-term effects will be."
     },
     themeTags: ["tariff-reset", "capital-discipline"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: true
   },
   {
     ticker: "BLK",
     name: "BlackRock",
-    sector: "Banks",
+    sector: "Capital Markets",
+    sectorId: "financials",
     reportDate: "Apr 14",
     fiscalPeriod: "Q1 2026",
     epsActual: 12.53,
@@ -139,12 +155,14 @@ export const companies: CompanyEarnings[] = [
       quote: "We've seen more advancements on private markets to 401(k) in the last 12 months than in the last 20 years. Demand for private credit products is structural."
     },
     themeTags: ["capital-discipline"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: false
   },
   {
     ticker: "JNJ",
     name: "Johnson & Johnson",
-    sector: "Healthcare",
+    sector: "Pharmaceuticals",
+    sectorId: "health-care",
     reportDate: "Apr 14",
     fiscalPeriod: "Q1 2026",
     epsActual: 2.70,
@@ -167,19 +185,21 @@ export const companies: CompanyEarnings[] = [
       quote: "We said 2026 would be a year of accelerated growth and impact for Johnson & Johnson. Progress in our pipeline accelerated in Q1 with the FDA approval of Tecvayli plus Darzalex Faspro."
     },
     themeTags: ["consumer-bifurcation"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: false
   },
   {
     ticker: "MS",
     name: "Morgan Stanley",
-    sector: "Banks",
+    sector: "Capital Markets",
+    sectorId: "financials",
     reportDate: "Apr 15",
     fiscalPeriod: "Q1 2026",
     epsActual: 3.43,
-    epsEstimate: 3.04,
-    epsSurprisePct: 12.8,
+    epsEstimate: 3.02,
+    epsSurprisePct: 13.6,
     revenueActualBn: 20.58,
-    revenueEstimateBn: 19.4,
+    revenueEstimateBn: 19.74,
     revenueGrowthYoY: 16.0,
     stockReaction1d: 5.4,
     guidance: "reaffirmed",
@@ -195,17 +215,19 @@ export const companies: CompanyEarnings[] = [
       quote: "AI is our friend. It is just the latest generation of technology that is going to be part of the ecosystem. Copiloting, where super agents work to drive efficiency and effectiveness across the wealth portfolio."
     },
     themeTags: ["ai-power", "capital-discipline"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: true
   },
   {
     ticker: "NFLX",
     name: "Netflix",
     sector: "Entertainment",
+    sectorId: "communication-services",
     reportDate: "Apr 16",
     fiscalPeriod: "Q1 2026",
-    epsActual: 6.61,
-    epsEstimate: 5.65,
-    epsSurprisePct: 17.0,
+    epsActual: 1.23,
+    epsEstimate: 0.76,
+    epsSurprisePct: 61.8,
     revenueActualBn: 12.25,
     revenueEstimateBn: 12.17,
     revenueGrowthYoY: 16.2,
@@ -223,18 +245,21 @@ export const companies: CompanyEarnings[] = [
       quote: "When the cost of the Warner Bros. deal grew beyond the net value to our business and to our shareholders, we were willing to put emotion and ego aside and walk away. It was a nice to have, not a need to have."
     },
     themeTags: ["capital-discipline", "consumer-bifurcation"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: true,
+    gaapNote: "GAAP EPS includes a $2.8 billion termination fee related to the cancelled Warner Bros. transaction (per FactSet). Adjusted EPS reported by Netflix was approximately $6.61."
   },
   {
     ticker: "GE",
     name: "GE Aerospace",
-    sector: "Industrial",
+    sector: "Aerospace & Defense",
+    sectorId: "industrials",
     reportDate: "Apr 21",
     fiscalPeriod: "Q1 2026",
     epsActual: 1.86,
     epsEstimate: 1.60,
     epsSurprisePct: 16.3,
-    revenueActualBn: 11.6,
+    revenueActualBn: 11.61,
     revenueEstimateBn: 10.71,
     revenueGrowthYoY: 29.0,
     stockReaction1d: -4.5,
@@ -251,19 +276,21 @@ export const companies: CompanyEarnings[] = [
       quote: "Engine deliveries up 43%, LEAP up 63%. Defense book-to-bill was above 2 for the second consecutive quarter — record defense orders for this decade."
     },
     themeTags: ["ai-power"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: true
   },
   {
     ticker: "UNH",
     name: "UnitedHealth",
-    sector: "Healthcare",
+    sector: "Health Care Providers & Services",
+    sectorId: "health-care",
     reportDate: "Apr 21",
     fiscalPeriod: "Q1 2026",
     epsActual: 7.23,
-    epsEstimate: 6.59,
-    epsSurprisePct: 9.7,
-    revenueActualBn: 111.7,
-    revenueEstimateBn: 109.4,
+    epsEstimate: 6.58,
+    epsSurprisePct: 9.9,
+    revenueActualBn: 111.72,
+    revenueEstimateBn: 109.43,
     revenueGrowthYoY: 2.0,
     stockReaction1d: 9.0,
     guidance: "raised",
@@ -279,12 +306,14 @@ export const companies: CompanyEarnings[] = [
       quote: "This management team believes we are a long way from performing to our full potential. We remain on track to invest nearly $1.5 billion in AI-related initiatives in 2026."
     },
     themeTags: ["ai-power", "consumer-bifurcation"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: true
   },
   {
     ticker: "RTX",
     name: "RTX Corp",
-    sector: "Industrial",
+    sector: "Aerospace & Defense",
+    sectorId: "industrials",
     reportDate: "Apr 21",
     fiscalPeriod: "Q1 2026",
     epsActual: 1.78,
@@ -307,17 +336,19 @@ export const companies: CompanyEarnings[] = [
       quote: "The current landscape clearly underscores the need for munitions depth, integrated air and missile defense technology, and more advanced capabilities to counter evolving threats."
     },
     themeTags: ["tariff-reset", "capital-discipline"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: true
   },
   {
     ticker: "GEV",
     name: "GE Vernova",
-    sector: "Industrial",
+    sector: "Electrical Equipment",
+    sectorId: "industrials",
     reportDate: "Apr 22",
     fiscalPeriod: "Q1 2026",
-    epsActual: 1.98,
-    epsEstimate: 1.90,
-    epsSurprisePct: 4.2,
+    epsActual: 17.44,
+    epsEstimate: 1.95,
+    epsSurprisePct: 794.4,
     revenueActualBn: 9.34,
     revenueEstimateBn: 9.27,
     revenueGrowthYoY: 16.0,
@@ -334,13 +365,16 @@ export const companies: CompanyEarnings[] = [
       role: "CEO",
       quote: "Quarter-to-date, we have booked more Power equipment orders in terms of value than we did in all of Q1 2026. Approximately 80% of our total gigawatts under contract are with traditional customers with the remaining 20% explicitly supporting data centers."
     },
-    themeTags: ["ai-power", "tariff-reset"],
-    status: "beat"
+    themeTags: ["ai-power", "tariff-reset", "margin-record"],
+    status: "beat",
+    factsetSourced: true,
+    gaapNote: "GAAP EPS of $17.44 includes $4.5 billion in pre-tax M&A gains (per FactSet). Adjusted EPS reported by GE Vernova was approximately $1.98. The single largest contributor to S&P 500 earnings revisions since March 31."
   },
   {
     ticker: "LRCX",
     name: "Lam Research",
-    sector: "Semiconductors",
+    sector: "Semiconductors & Equipment",
+    sectorId: "info-tech",
     reportDate: "Apr 22",
     fiscalPeriod: "FQ3 2026",
     epsActual: 1.47,
@@ -363,17 +397,19 @@ export const companies: CompanyEarnings[] = [
       quote: "AI transformation is moving beyond compute and into the storage layer. Token economics are driving changes to the memory hierarchy used in AI data centers. We now expect WFE of $140 billion with a bias to the upside."
     },
     themeTags: ["ai-power"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: false
   },
   {
     ticker: "TXN",
     name: "Texas Instruments",
-    sector: "Semiconductors",
+    sector: "Semiconductors & Equipment",
+    sectorId: "info-tech",
     reportDate: "Apr 22",
     fiscalPeriod: "Q1 2026",
     epsActual: 1.68,
-    epsEstimate: 1.38,
-    epsSurprisePct: 21.7,
+    epsEstimate: 1.36,
+    epsSurprisePct: 23.5,
     revenueActualBn: 4.83,
     revenueEstimateBn: 4.52,
     revenueGrowthYoY: 19.0,
@@ -391,12 +427,14 @@ export const companies: CompanyEarnings[] = [
       quote: "Industrial increased more than 30% year over year, growing broadly across all sectors and regions. We are very happy that we have internalized our supply because we are seeing more and more bottlenecks."
     },
     themeTags: ["ai-power"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: true
   },
   {
     ticker: "TSLA",
     name: "Tesla",
-    sector: "Auto/Tech",
+    sector: "Automobiles",
+    sectorId: "consumer-discretionary",
     reportDate: "Apr 22",
     fiscalPeriod: "Q1 2026",
     epsActual: 0.41,
@@ -419,12 +457,14 @@ export const companies: CompanyEarnings[] = [
       quote: "Our current expectation for 2026 is over $25 billion of CapEx. We're further increasing our investment in AI-related initiatives, including the AI infrastructure to support robotaxi and the launch of Optimus."
     },
     themeTags: ["ai-power", "consumer-bifurcation"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: false
   },
   {
     ticker: "PM",
     name: "Philip Morris Intl",
-    sector: "Consumer",
+    sector: "Tobacco",
+    sectorId: "consumer-staples",
     reportDate: "Apr 22",
     fiscalPeriod: "Q1 2026",
     epsActual: 1.96,
@@ -447,12 +487,14 @@ export const companies: CompanyEarnings[] = [
       quote: "Our performance exceeded our expectations in the first quarter, with an outstanding delivery from IQOS driving very good growth for the group against a strong prior-year comparison."
     },
     themeTags: ["consumer-bifurcation"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: false
   },
   {
     ticker: "AXP",
     name: "American Express",
-    sector: "Consumer",
+    sector: "Consumer Finance",
+    sectorId: "financials",
     reportDate: "Apr 23",
     fiscalPeriod: "Q1 2026",
     epsActual: 4.28,
@@ -475,19 +517,21 @@ export const companies: CompanyEarnings[] = [
       quote: "Gen Z is up 38%. The millennials are up 13%. Our millennial and Gen Z credit performance is better than the industry's Gen X and baby boomer."
     },
     themeTags: ["consumer-bifurcation"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: false
   },
   {
     ticker: "INTC",
     name: "Intel",
-    sector: "Semiconductors",
+    sector: "Semiconductors & Equipment",
+    sectorId: "info-tech",
     reportDate: "Apr 23",
     fiscalPeriod: "Q1 2026",
     epsActual: 0.29,
-    epsEstimate: 0.01,
-    epsSurprisePct: 2800.0,
-    revenueActualBn: 13.6,
-    revenueEstimateBn: 12.32,
+    epsEstimate: 0.02,
+    epsSurprisePct: 1350.0,
+    revenueActualBn: 13.58,
+    revenueEstimateBn: 12.42,
     revenueGrowthYoY: 7.0,
     stockReaction1d: 23.6,
     guidance: "raised",
@@ -503,12 +547,14 @@ export const companies: CompanyEarnings[] = [
       quote: "The CPU is reinserting itself as the indispensable foundation of the AI era. 18A wafers are now running ahead of internal projections, representing a meaningful inflection in our execution."
     },
     themeTags: ["ai-power"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: true
   },
   {
     ticker: "PG",
     name: "Procter & Gamble",
-    sector: "Consumer",
+    sector: "Household Products",
+    sectorId: "consumer-staples",
     reportDate: "Apr 24",
     fiscalPeriod: "FQ3 2026",
     epsActual: 1.59,
@@ -531,6 +577,7 @@ export const companies: CompanyEarnings[] = [
       quote: "The cost impact is broader than just commodity. We have about 150 million after-tax in refunds available from the IEPA part tariff. We are following the process the US Administration is beginning to lay out."
     },
     themeTags: ["tariff-reset", "consumer-bifurcation"],
-    status: "beat"
+    status: "beat",
+    factsetSourced: false
   }
 ];

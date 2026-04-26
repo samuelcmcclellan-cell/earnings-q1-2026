@@ -2,10 +2,10 @@ import { Activity } from "lucide-react";
 
 export function Hero({
   asOfDate,
-  reportCount,
+  pctReporting,
 }: {
   asOfDate: string;
-  reportCount: number;
+  pctReporting: number;
 }) {
   return (
     <section className="relative overflow-hidden border-b border-slate-800/80">
@@ -22,26 +22,27 @@ export function Hero({
           </span>
           <span>Live · {asOfDate}</span>
           <span className="text-slate-700">·</span>
-          <span>{reportCount} mega-cap reports</span>
+          <span>{pctReporting}% of S&amp;P 500 reporting</span>
         </div>
 
         <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.02] text-slate-50">
-          The earnings season that <span className="text-emerald-400">refused</span> to confirm <br className="hidden md:block" />
-          a single market narrative.
+          The S&amp;P 500 just printed its <span className="text-emerald-400">highest net margin</span> <br className="hidden md:block" />
+          since FactSet started counting.
         </h1>
 
         <p className="mt-8 max-w-3xl text-lg leading-relaxed text-slate-300">
-          Nineteen mega-caps. Six weeks. One season that simultaneously priced an industrial super-cycle, a tariff-driven margin reset,
-          a bifurcating consumer, and a market that paid up for AI-power infrastructure while punishing nearly everything else.
-          We read the transcripts so you don&apos;t have to. Below: four themes, every quote, and the data underneath.
+          Q1 2026 earnings season — through 28% of the S&amp;P 500. Blended earnings growth +15.1%, revenue growth +10.3%, and a
+          13.4% net profit margin that breaks the prior all-time high. Underneath the headline: Information Technology +46.3%
+          earnings vs Energy -14.4%, beats getting smaller rewards, and a forward P/E that has rerated to 20.9x. Every figure on
+          this dashboard is sourced from FactSet Earnings Insight, 4/24/2026.
         </p>
 
         <div className="mt-10 flex flex-wrap gap-3 text-xs text-slate-400">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full glass">
             <Activity className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Source: official transcripts &amp; 8-Ks</span>
+            <span>Source: FactSet Earnings Insight, 4/24/2026</span>
           </div>
-          <div className="px-3 py-1.5 rounded-full glass">No Motley Fool. No Yahoo. No paraphrasing.</div>
+          <div className="px-3 py-1.5 rounded-full glass">11 sectors. 5 themes. 3 read lengths.</div>
         </div>
       </div>
     </section>

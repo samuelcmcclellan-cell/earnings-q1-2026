@@ -2,9 +2,10 @@ import { TrendingUp } from "lucide-react";
 
 export function Header({ active, onNav }: { active: string; onNav: (k: string) => void }) {
   const items = [
-    { key: "themes", label: "Themes" },
     { key: "scoreboard", label: "Scoreboard" },
-    { key: "companies", label: "Companies" },
+    { key: "themes", label: "Themes" },
+    { key: "sectors", label: "Sectors" },
+    { key: "data", label: "Charts" },
     { key: "quotes", label: "Quote Wall" },
     { key: "reports", label: "Reports" },
   ];

@@ -1,28 +1,29 @@
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell, Legend } from "recharts";
+import { ResponsiveContainer, ComposedChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell, Scatter, Legend } from "recharts";
 import type { Sector } from "../../types";
 
-export function SectorGrowth({ sectors }: { sectors: Sector[] }) {
+export function SectorMargins({ sectors }: { sectors: Sector[] }) {
   const data = sectors
-    .filter((s) => s.earningsGrowth !== null || s.revenueGrowth !== null)
+    .filter((s) => s.marginQ1 !== null)
     .map((s) => ({
       name: s.shortName,
-      earnings: s.earningsGrowth,
-      revenue: s.revenueGrowth,
+      q1: s.marginQ1 as number,
+      benchmark: s.margin5yr ?? s.marginYoY ?? null,
+      benchLabel: s.margin5yr !== null ? "5yr avg" : s.marginYoY !== null ? "YoY" : "—",
     }))
-    .sort((a, b) => (b.earnings ?? -999) - (a.earnings ?? -999));
+    .sort((a, b) => b.q1 - a.q1);
 
   return (
     <div className="glass rounded-xl p-5">
       <div className="flex items-baseline justify-between mb-4">
         <div>
           <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">FactSet 4/24/2026</div>
-          <div className="text-base font-medium text-slate-200 mt-1">Sector Growth — Earnings vs Revenue (Q1 2026, %)</div>
+          <div className="text-base font-medium text-slate-200 mt-1">Sector Net Profit Margin (%)</div>
         </div>
-        <div className="text-[11px] text-slate-500">Blended YoY · S&P 500</div>
+        <div className="text-[11px] text-slate-500">Q1 2026 bar · benchmark dot</div>
       </div>
-      <div className="h-[340px]">
+      <div className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 5, right: 16, bottom: 36, left: 8 }}>
+          <ComposedChart data={data} margin={{ top: 5, right: 16, bottom: 36, left: 8 }}>
             <CartesianGrid vertical={false} stroke="#1f2a44" />
             <XAxis
               dataKey="name"
@@ -40,25 +41,25 @@ export function SectorGrowth({ sectors }: { sectors: Sector[] }) {
               cursor={{ fill: "rgba(59,130,246,0.06)" }}
               formatter={(v, name) => {
                 const num = typeof v === "number" ? v : null;
-                return [num === null ? "n/a" : `${num.toFixed(1)}%`, String(name) === "earnings" ? "Earnings" : "Revenue"];
+                return [num === null ? "n/a" : `${num.toFixed(1)}%`, String(name) === "q1" ? "Q1 2026" : "Benchmark"];
               }}
             />
             <Legend wrapperStyle={{ fontSize: 11, color: "#9aa7c2" }} />
-            <Bar dataKey="earnings" name="Earnings" radius={[4, 4, 0, 0]}>
+            <Bar dataKey="q1" name="Q1 2026" radius={[4, 4, 0, 0]}>
               {data.map((d, i) => (
-                <Cell key={i} fill={(d.earnings ?? 0) >= 0 ? "#10b981" : "#f43f5e"} />
+                <Cell key={i} fill={
+                  d.benchmark !== null && d.q1 < d.benchmark ? "#f43f5e" :
+                  d.q1 > 20 ? "#10b981" :
+                  "#3b82f6"
+                } />
               ))}
             </Bar>
-            <Bar dataKey="revenue" name="Revenue" radius={[4, 4, 0, 0]} fill="#3b82f6">
-              {data.map((d, i) => (
-                <Cell key={i} fill={(d.revenue ?? 0) >= 0 ? "#3b82f6" : "#f59e0b"} />
-              ))}
-            </Bar>
-          </BarChart>
+            <Scatter dataKey="benchmark" name="Benchmark" fill="#f59e0b" />
+          </ComposedChart>
         </ResponsiveContainer>
       </div>
       <div className="mt-3 text-[11px] text-slate-500 leading-relaxed">
-        Source: FactSet Earnings Insight, 4/24/2026. Sectors without text-extractable growth rates omitted.
+        Info Tech 29.1% (vs 25.3% 5yr) is the index leader. Energy 6.6% (vs 9.6% 5yr) is the only sector materially below trend.
       </div>
     </div>
   );
